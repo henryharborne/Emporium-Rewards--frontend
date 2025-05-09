@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../store/useUserStore';
+import SearchCustomers from '../components/SearchCustomers';
+import ManageCustomers from '../components/ManageCustomers';
+import AdminLogs from '../components/AdminLogs';
 
 function Dashboard() {
   const admin = useUserStore((state) => state.admin);
@@ -8,6 +11,9 @@ function Dashboard() {
   const logoutAdmin = useUserStore((state) => state.logoutAdmin);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showManage, setShowManage] = useState(false);
+  const [showLogs, setShowLogs] = useState(false);
 
   useEffect(() => {
     const checkAdminAuth = async () => {
@@ -58,25 +64,28 @@ function Dashboard() {
       <h2 className="text-2xl font-bold mb-2">Welcome, {admin?.name}</h2>
       <p className="text-gray-600 mb-4">This is your admin dashboard.</p>
 
-      <div className="space-y-4">
+      <div className="space-y-4 mb-6">
         <button
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-          onClick={() => alert('Search coming soon')}
+          onClick={() => setShowSearch(!showSearch)}
         >
-          🔍 Search Customers
+          🔍 {showSearch ? 'Hide' : 'Search'} Customers
         </button>
+
         <button
           className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-          onClick={() => alert('Add/Delete coming soon')}
+          onClick={() => setShowManage(!showManage)}
         >
-          ➕➖ Add or Delete Customers
+          ➕➖ {showManage ? 'Hide' : 'Add/Delete'} Customers
         </button>
+
         <button
           className="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-900"
-          onClick={() => alert('Logs coming soon')}
+          onClick={() => setShowLogs(!showLogs)}
         >
-          📜 View Logs
+          📜 {showLogs ? 'Hide' : 'View'} Logs
         </button>
+
         <button
           onClick={handleLogout}
           className="text-red-600 underline hover:text-red-800 text-sm mt-2"
@@ -84,6 +93,24 @@ function Dashboard() {
           Logout
         </button>
       </div>
+
+      {showSearch && (
+        <div id="search-section">
+          <SearchCustomers />
+        </div>
+      )}
+
+      {showManage && (
+        <div id="manage-section">
+          <ManageCustomers />
+        </div>
+      )}
+
+      {showLogs && (
+        <div id="logs-section">
+          <AdminLogs />
+        </div>
+      )}
     </div>
   );
 }
