@@ -53,15 +53,19 @@ function PhoneLookupForm() {
 
       {points !== null && (
         <div className="mt-4 text-center text-green-700">
-            <p className="font-semibold text-lg">
-                You have {points} point{points === 1 ? '' : 's'}!
+          <p className="font-semibold text-lg">
+            You have {points} point{points === 1 ? '' : 's'}!
+          </p>
+          {points >= 100 ? (
+            <p className="mt-1">
+              🎉 You are eligible for <strong>${Math.floor(points / 100) * 10} off</strong> on your next order!
             </p>
-            {points >= 100 ? (
-                <p className="mt-1">🎉 You are eligible for <strong>$10 off</strong> on your next order!</p>
-            ) : (
-                <p className="mt-1">You are <strong>{100 - points} point{100 - points === 1 ? '' : 's'}</strong> away from points redemption.</p>
-            )}
-        </div>  
+          ) : (
+            <p className="mt-1">
+              You are <strong>{100 - points} point{100 - points === 1 ? '' : 's'}</strong> away from points redemption.
+            </p>
+          )}
+        </div>
       )}
 
       {error && (
