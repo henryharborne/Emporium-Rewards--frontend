@@ -8,17 +8,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <nav className="bg-white px-6 py-4 shadow-md mb-4">
-        <ul className="flex justify-center">
-          {!admin?.token && (
-            <li>
-              <Link to="/" className="text-blue-600 font-semibold hover:underline">
-                Home
-              </Link>
-            </li>
-          )}
-        </ul>
-      </nav>
 
       <main className="p-4">
         <Routes>
