@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useUserStore } from '../store/useUserStore';
 
-type LogEntry = {
+type AdminLog = {
   id: string;
   created_at: string;
   admin_email: string;
@@ -14,7 +14,7 @@ type LogEntry = {
 
 function AdminLogs() {
   const admin = useUserStore((state) => state.admin);
-  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [logs, setLogs] = useState<AdminLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -33,7 +33,7 @@ function AdminLogs() {
           throw new Error(data.error || 'Failed to fetch logs.');
         }
 
-        setLogs(data.reverse()); // Show newest first
+        setLogs(data);
       } catch (err: any) {
         setError(err.message || 'Something went wrong.');
       } finally {
@@ -44,42 +44,69 @@ function AdminLogs() {
     fetchLogs();
   }, [admin]);
 
+  if (loading) return <p>Loading logs...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!logs.length) return <p>No logs found.</p>;
+
   return (
-    <div className="mt-8 border-t pt-6 overflow-x-auto">
-      <h3 className="text-lg font-semibold mb-4">📜 Admin Action Logs</h3>
-
-      {loading && <p>Loading logs...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {!loading && logs.length === 0 && <p>No logs found.</p>}
-
-      {logs.length > 0 && (
-        <table className="w-full text-sm text-left border-collapse">
-          <thead className="bg-gray-100 border-b">
+    <div>
+      <h3 style={{ marginBottom: '1rem' }}>📜 Admin Action Logs</h3>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={tableStyle}>
+          <thead>
             <tr>
-              <th className="px-4 py-2 font-medium">Timestamp</th>
-              <th className="px-4 py-2 font-medium">Admin</th>
-              <th className="px-4 py-2 font-medium">Action</th>
-              <th className="px-4 py-2 font-medium">Customer ID</th>
-              <th className="px-4 py-2 font-medium">Details</th>
+              <th style={thStyle}>Timestamp</th>
+              <th style={thStyle}>Admin</th>
+              <th style={thStyle}>Action</th>
+              <th style={thStyle}>Customer ID</th>
+              <th style={thStyle}>Details</th>
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
-              <tr key={log.id} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-                  {new Date(log.created_at).toLocaleString()}
+            {logs.map((log, index) => (
+              <tr
+                key={log.id}
+                style={{
+                  backgroundColor: index % 2 === 0 ? '#111' : '#1a1a1a',
+                  borderBottom: '1px solid #333',
+                }}
+              >
+                <td style={tdStyle}>{new Date(log.created_at).toLocaleString()}</td>
+                <td style={tdStyle}>{log.admin_email}</td>
+                <td style={{ ...tdStyle, color: '#60a5fa', fontWeight: 600 }}>
+                  {log.action_type}
                 </td>
-                <td className="px-4 py-2 text-gray-700">{log.admin_email}</td>
-                <td className="px-4 py-2 text-blue-700 font-semibold">{log.action_type}</td>
-                <td className="px-4 py-2 text-gray-800">{log.customer_id}</td>
-                <td className="px-4 py-2 text-gray-600">{log.details || '-'}</td>
+                <td style={tdStyle}>{log.customer_id}</td>
+                <td style={tdStyle}>{log.details || '-'}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
+      </div>
     </div>
   );
 }
+
+const tableStyle: React.CSSProperties = {
+  width: '100%',
+  borderCollapse: 'collapse',
+  backgroundColor: '#000',
+};
+
+const thStyle: React.CSSProperties = {
+  position: 'sticky',
+  top: 0,
+  backgroundColor: '#222',
+  color: '#fff',
+  padding: '12px',
+  textAlign: 'left',
+  borderBottom: '2px solid #333',
+};
+
+const tdStyle: React.CSSProperties = {
+  padding: '12px',
+  color: '#ccc',
+  verticalAlign: 'top',
+};
 
 export default AdminLogs;

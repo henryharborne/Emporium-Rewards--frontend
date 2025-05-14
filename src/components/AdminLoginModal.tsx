@@ -28,7 +28,6 @@ function AdminLoginModal({ onClose }: Props) {
         return;
       }
 
-      // Save admin info + token to Zustand
       setAdmin({
         name: data.username,
         email: data.email,
@@ -43,37 +42,31 @@ function AdminLoginModal({ onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
+    <div style={overlayStyle}>
+      <div style={modalStyle}>
+        <h2 style={titleStyle}>Admin Login</h2>
 
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border px-3 py-2 mb-3 rounded"
+          style={inputStyle}
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-3 py-2 mb-3 rounded"
+          style={inputStyle}
         />
-        {error && <p className="text-red-600 mb-2">{error}</p>}
+        {error && <p style={errorStyle}>{error}</p>}
 
-        <div className="flex justify-between">
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:underline"
-          >
+        <div style={buttonRowStyle}>
+          <button onClick={onClose} style={cancelButtonStyle}>
             Cancel
           </button>
-          <button
-            onClick={handleLogin}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
+          <button onClick={handleLogin} className="button admin-button">
             Login
           </button>
         </div>
@@ -81,5 +74,61 @@ function AdminLoginModal({ onClose }: Props) {
     </div>
   );
 }
+
+const overlayStyle: React.CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  backgroundColor: 'rgba(0,0,0,0.6)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 999,
+};
+
+const modalStyle: React.CSSProperties = {
+  backgroundColor: '#111',
+  color: '#fff',
+  padding: '2rem',
+  borderRadius: '10px',
+  width: '100%',
+  maxWidth: '400px',
+  boxShadow: '0 0 20px rgba(0,0,0,0.4)',
+};
+
+const titleStyle: React.CSSProperties = {
+  fontSize: '1.5rem',
+  marginBottom: '1rem',
+  textAlign: 'center',
+};
+
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  padding: '10px 12px',
+  border: '1px solid #444',
+  backgroundColor: '#000',
+  color: '#fff',
+  borderRadius: '6px',
+  marginBottom: '1rem',
+};
+
+const errorStyle: React.CSSProperties = {
+  color: '#f87171',
+  marginBottom: '1rem',
+  textAlign: 'center',
+};
+
+const buttonRowStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '1rem',
+};
+
+const cancelButtonStyle: React.CSSProperties = {
+  background: 'none',
+  color: '#aaa',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: '0.95rem',
+};
 
 export default AdminLoginModal;

@@ -36,7 +36,6 @@ function SearchCustomers() {
       });
 
       const data = await response.json();
-
       if (!response.ok) throw new Error(data.error || 'Search failed.');
 
       const filtered = data.filter((customer: Customer) =>
@@ -69,7 +68,6 @@ function SearchCustomers() {
     try {
       const { name, notes, points } = editData;
 
-      // PUT - update name/notes
       const putRes = await fetch(`http://localhost:4000/api/customers/${customerId}`, {
         method: 'PUT',
         headers: {
@@ -81,7 +79,6 @@ function SearchCustomers() {
 
       if (!putRes.ok) throw new Error('Failed to update customer info.');
 
-      // PATCH - update points if changed
       const original = results.find((c) => c.id === customerId);
       const pointDiff = (points ?? 0) - (original?.points ?? 0);
 
@@ -100,7 +97,7 @@ function SearchCustomers() {
 
       setMessage('Customer updated successfully.');
       cancelEdit();
-      handleSearch(); // Refresh results
+      handleSearch();
     } catch (err: any) {
       setError(err.message || 'Update failed.');
     }
@@ -116,33 +113,33 @@ function SearchCustomers() {
   };
 
   return (
-    <div className="mt-8 border-t pt-6">
-      <h3 className="text-lg font-semibold mb-4">🔍 Search Customers</h3>
+    <div style={{ marginTop: '2rem' }}>
+      <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>🔍 Search Customers</h3>
 
-      <div className="flex gap-2 mb-4">
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <input
           type="text"
           placeholder={`Search by ${searchBy}`}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 border px-3 py-2 rounded"
+          className="input"
         />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
+        <button onClick={handleSearch} className="button" style={{ backgroundColor: '#0050ff' }}>
           Search
         </button>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         {['name', 'email', 'phone'].map((field) => (
           <button
             key={field}
             onClick={() => setSearchBy(field as any)}
-            className={`px-3 py-1 border rounded ${
-              searchBy === field ? 'bg-blue-600 text-white' : 'bg-white text-black'
-            }`}
+            className="button"
+            style={{
+              backgroundColor: searchBy === field ? '#e8491d' : '#333',
+              color: '#fff',
+              padding: '6px 12px',
+            }}
           >
             {field}
           </button>
@@ -150,64 +147,56 @@ function SearchCustomers() {
       </div>
 
       {loading && <p>Loading...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {message && <p className="text-green-600">{message}</p>}
+      {error && <p className="error">{error}</p>}
+      {message && <p className="success">{message}</p>}
 
       {results.length > 0 && (
-        <div className="mt-4 space-y-4">
+        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {results.map((cust) => (
-            <div key={cust.id} className="border rounded p-4 shadow">
+            <div key={cust.id} className="container">
               {editingId === cust.id ? (
                 <>
                   <input
-                    className="block mb-2 w-full border px-2 py-1 rounded"
+                    className="input"
                     value={editData.name ?? ''}
                     onChange={(e) => setEditData((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="Name"
                   />
                   <input
-                    className="block mb-2 w-full border px-2 py-1 rounded"
+                    className="input"
                     value={editData.notes ?? ''}
                     onChange={(e) => setEditData((prev) => ({ ...prev, notes: e.target.value }))}
                     placeholder="Notes"
                   />
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium">Points: {editData.points}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontWeight: 'bold' }}>Points: {editData.points}</span>
                     <input
                       type="text"
                       inputMode="numeric"
-                      pattern="[0-9]*"
-                      className="w-20 border px-2 py-1 rounded appearance-none"
+                      className="input"
+                      style={{ width: '60px' }}
                       value={adjustAmount === 0 ? '' : adjustAmount}
                       onChange={(e) =>
                         setAdjustAmount(e.target.value === '' ? 0 : parseInt(e.target.value) || 0)
                       }
                       placeholder="0"
                     />
-                    <button
-                      className="px-3 py-1 bg-blue-600 text-white rounded"
-                      onClick={() => applyPointAdjustment('add')}
-                    >
+                    <button onClick={() => applyPointAdjustment('add')} className="button" style={{ backgroundColor: '#22c55e' }}>
                       Add
                     </button>
-                    <button
-                      className="px-3 py-1 bg-red-600 text-white rounded"
-                      onClick={() => applyPointAdjustment('subtract')}
-                    >
+                    <button onClick={() => applyPointAdjustment('subtract')} className="button" style={{ backgroundColor: '#ef4444' }}>
                       Subtract
                     </button>
                   </div>
-                  <div className="flex gap-2">
+                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                     <button
-                      className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
                       onClick={() => saveChanges(cust.id)}
+                      className="button"
+                      style={{ backgroundColor: '#10b981' }}
                     >
                       Save
                     </button>
-                    <button
-                      className="text-sm text-gray-500 hover:underline"
-                      onClick={cancelEdit}
-                    >
+                    <button onClick={cancelEdit} style={{ color: '#aaa', fontSize: '0.9rem' }}>
                       Cancel
                     </button>
                   </div>
@@ -219,10 +208,7 @@ function SearchCustomers() {
                   <p><strong>Phone:</strong> {cust.phone}</p>
                   <p><strong>Points:</strong> {cust.points}</p>
                   <p><strong>Notes:</strong> {cust.notes}</p>
-                  <button
-                    className="mt-2 text-blue-600 underline hover:text-blue-800"
-                    onClick={() => startEdit(cust)}
-                  >
+                  <button onClick={() => startEdit(cust)} style={{ color: '#60a5fa', marginTop: '0.5rem' }}>
                     ✏️ Edit
                   </button>
                 </>

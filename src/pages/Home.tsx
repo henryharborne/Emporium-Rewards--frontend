@@ -19,20 +19,20 @@ function Home() {
     }
   }, [admin, navigate]);
 
-  if (loading) return null; // block rendering during redirect decision
+  if (loading) return null;
 
   return (
-    <div>
+    <div className="container">
+      <h1>Smoke Emporium Rewards</h1>
+      <p className="description">
+        Enter your phone number below to check your point balance and see if you're eligible for a reward.
+      </p>
+
       <PhoneLookupForm />
 
-      <div className="text-center mt-8">
-        <button
-          onClick={() => setShowLogin(true)}
-          className="text-blue-600 font-semibold underline hover:text-blue-800"
-        >
-          Admin Login
-        </button>
-      </div>
+      <button onClick={() => setShowLogin(true)} className="button admin-button">
+        Admin Login
+      </button>
 
       {showLogin && <AdminLoginModal onClose={() => setShowLogin(false)} />}
     </div>

@@ -56,31 +56,36 @@ function Dashboard() {
   };
 
   if (loading) {
-    return <p className="p-6">Checking admin session...</p>;
+    return <p className="container">Checking admin session...</p>;
   }
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-2">Welcome, {admin?.name}</h2>
-      <p className="text-gray-600 mb-4">This is your admin dashboard.</p>
+    <div className="container">
+      <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+        Welcome, {admin?.name}
+      </h2>
+      <p className="description">This is your admin dashboard.</p>
 
-      <div className="space-y-4 mb-6">
+      <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <button
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="button"
+          style={{ backgroundColor: '#0050ff' }}
           onClick={() => setShowSearch(!showSearch)}
         >
           🔍 {showSearch ? 'Hide' : 'Search'} Customers
         </button>
 
         <button
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+          className="button"
+          style={{ backgroundColor: '#22c55e' }}
           onClick={() => setShowManage(!showManage)}
         >
           ➕➖ {showManage ? 'Hide' : 'Add/Delete'} Customers
         </button>
 
         <button
-          className="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-900"
+          className="button"
+          style={{ backgroundColor: '#4b5563' }}
           onClick={() => setShowLogs(!showLogs)}
         >
           📜 {showLogs ? 'Hide' : 'View'} Logs
@@ -88,26 +93,26 @@ function Dashboard() {
 
         <button
           onClick={handleLogout}
-          className="text-red-600 underline hover:text-red-800 text-sm mt-2"
+          style={{ color: '#f87171', marginTop: '1rem', fontSize: '0.9rem' }}
         >
           Logout
         </button>
       </div>
 
       {showSearch && (
-        <div id="search-section">
+        <div id="search-section" style={{ marginTop: '2rem' }}>
           <SearchCustomers />
         </div>
       )}
 
       {showManage && (
-        <div id="manage-section">
+        <div id="manage-section" style={{ marginTop: '2rem' }}>
           <ManageCustomers />
         </div>
       )}
 
       {showLogs && (
-        <div id="logs-section">
+        <div id="logs-section" style={{ marginTop: '2rem' }}>
           <AdminLogs />
         </div>
       )}

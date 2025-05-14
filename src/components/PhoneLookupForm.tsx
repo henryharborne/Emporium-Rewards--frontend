@@ -34,34 +34,39 @@ function PhoneLookupForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow mt-10">
-      <h2 className="text-xl font-semibold mb-4 text-center">Check Your Points</h2>
+    <div className="container" style={{ marginBottom: '2rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '1rem' }}>
+        Check Your Points
+      </h2>
+
       <input
         type="tel"
         placeholder="Enter your phone number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
-        className="w-full border border-gray-300 rounded px-4 py-2 mb-4"
+        className="input"
       />
+
       <button
         onClick={handleLookup}
         disabled={loading || phone.length < 10}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        className="button"
+        style={{ marginTop: '1rem', backgroundColor: '#0050ff' }}
       >
         {loading ? 'Checking...' : 'Check Points'}
       </button>
 
       {points !== null && (
-        <div className="mt-4 text-center text-green-700">
-          <p className="font-semibold text-lg">
+        <div className="success" style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
             You have {points} point{points === 1 ? '' : 's'}!
           </p>
           {points >= 100 ? (
-            <p className="mt-1">
+            <p style={{ marginTop: '0.5rem' }}>
               🎉 You are eligible for <strong>${Math.floor(points / 100) * 10} off</strong> on your next order!
             </p>
           ) : (
-            <p className="mt-1">
+            <p style={{ marginTop: '0.5rem' }}>
               You are <strong>{100 - points} point{100 - points === 1 ? '' : 's'}</strong> away from points redemption.
             </p>
           )}
@@ -69,7 +74,7 @@ function PhoneLookupForm() {
       )}
 
       {error && (
-        <p className="mt-4 text-center text-red-600 font-medium">
+        <p className="error" style={{ textAlign: 'center', marginTop: '1rem' }}>
           {error}
         </p>
       )}
