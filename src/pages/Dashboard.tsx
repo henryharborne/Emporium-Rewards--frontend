@@ -55,6 +55,32 @@ function Dashboard() {
     navigate('/');
   };
 
+  const handleDownloadCSV = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/customers/export-customers', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to download CSV');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'customers.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error('Error downloading CSV:', err);
+    }
+  };
+
   if (loading) {
     return <p className="container">Checking admin session...</p>;
   }
@@ -89,6 +115,14 @@ function Dashboard() {
           onClick={() => setShowLogs(!showLogs)}
         >
           📜 {showLogs ? 'Hide' : 'View'} Logs
+        </button>
+
+        <button
+          className="button"
+          style={{ backgroundColor: '#facc15', color: '#000' }}
+          onClick={handleDownloadCSV}
+        >
+          📥 Download Customer CSV
         </button>
 
         <button
