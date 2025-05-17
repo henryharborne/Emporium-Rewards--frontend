@@ -6,13 +6,15 @@ function PhoneLookupForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleLookup = async () => {
     setLoading(true);
     setError('');
     setPoints(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/customers/lookup', {
+      const response = await fetch(`${API}/customers/lookup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

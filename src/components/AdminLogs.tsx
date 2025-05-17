@@ -18,9 +18,11 @@ function AdminLogs() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const API = import.meta.env.VITE_API_URL;
+
   const fetchLogs = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/admin/logs', {
+      const response = await fetch(`${API}/admin/logs`, {
         headers: {
           Authorization: `Bearer ${admin?.token}`,
         },
@@ -46,7 +48,7 @@ function AdminLogs() {
 
   const handleUndo = async (logId: string) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/logs/${logId}/undo`, {
+      const response = await fetch(`${API}/admin/logs/${logId}/undo`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${admin?.token}`,

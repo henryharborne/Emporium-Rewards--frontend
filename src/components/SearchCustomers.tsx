@@ -22,6 +22,8 @@ function SearchCustomers() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleSearch = async () => {
     setError('');
     setMessage('');
@@ -29,7 +31,7 @@ function SearchCustomers() {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:4000/api/customers/search?q=${encodeURIComponent(query)}`, {
+      const response = await fetch(`${API}/customers/search?q=${encodeURIComponent(query)}`, {
         headers: {
           Authorization: `Bearer ${admin?.token}`,
         },
@@ -68,7 +70,7 @@ function SearchCustomers() {
     try {
       const { name, notes, points } = editData;
 
-      const putRes = await fetch(`http://localhost:4000/api/customers/${customerId}`, {
+      const putRes = await fetch(`${API}/customers/${customerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +85,7 @@ function SearchCustomers() {
       const pointDiff = (points ?? 0) - (original?.points ?? 0);
 
       if (pointDiff !== 0) {
-        const patchRes = await fetch(`http://localhost:4000/api/customers/${customerId}/points`, {
+        const patchRes = await fetch(`${API}/customers/${customerId}/points`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

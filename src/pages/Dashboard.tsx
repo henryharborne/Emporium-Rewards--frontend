@@ -15,6 +15,8 @@ function Dashboard() {
   const [showManage, setShowManage] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
 
+  const API = import.meta.env.VITE_API_URL;
+
   // Auth check
   useEffect(() => {
     const checkAdminAuth = async () => {
@@ -22,7 +24,7 @@ function Dashboard() {
       if (!token) return navigate('/');
 
       try {
-        const response = await fetch('http://localhost:4000/api/admin/is-admin', {
+        const response = await fetch(`${API}/admin/is-admin`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -49,14 +51,14 @@ function Dashboard() {
     };
 
     checkAdminAuth();
-  }, [navigate, setAdmin]);
+  }, [navigate, setAdmin, API]);
 
   // Cold-start prevention ping
   useEffect(() => {
-    fetch('http://localhost:4000/api/admin/ping')
+    fetch(`${API}/admin/ping`)
       .then(() => console.log('Pinged backend to keep warm'))
       .catch(() => console.log('Ping failed (possibly sleeping backend)'));
-  }, []);
+  }, [API]);
 
   const handleLogout = () => {
     logoutAdmin();
@@ -65,7 +67,7 @@ function Dashboard() {
 
   const handleDownloadCSV = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/customers/export-customers', {
+      const response = await fetch(`${API}/customers/export-customers`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('adminToken')}`,

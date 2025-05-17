@@ -3,6 +3,7 @@ import { useUserStore } from '../store/useUserStore';
 
 function ManageCustomers() {
   const admin = useUserStore((state) => state.admin);
+  const API = import.meta.env.VITE_API_URL;
 
   const [addForm, setAddForm] = useState({
     name: '',
@@ -28,7 +29,7 @@ function ManageCustomers() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/customers', {
+      const response = await fetch(`${API}/customers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ function ManageCustomers() {
     setDeleteError('');
 
     try {
-      const response = await fetch(`http://localhost:4000/api/customers/search?q=${deleteValue}`, {
+      const response = await fetch(`${API}/customers/search?q=${deleteValue}`, {
         headers: {
           Authorization: `Bearer ${admin?.token}`,
         },
@@ -68,7 +69,7 @@ function ManageCustomers() {
       if (!response.ok || customers.length === 0) throw new Error('Customer not found.');
 
       const customerId = customers[0].id;
-      const deleteRes = await fetch(`http://localhost:4000/api/customers/${customerId}`, {
+      const deleteRes = await fetch(`${API}/customers/${customerId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${admin?.token}`,

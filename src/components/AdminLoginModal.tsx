@@ -11,11 +11,13 @@ function AdminLoginModal({ onClose }: Props) {
   const [error, setError] = useState('');
   const setAdmin = useUserStore((state) => state.setAdmin);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleLogin = async () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:4000/api/admin/login', {
+      const response = await fetch(`${API}/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
