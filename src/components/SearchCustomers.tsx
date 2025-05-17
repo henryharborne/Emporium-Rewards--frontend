@@ -70,13 +70,18 @@ function SearchCustomers() {
     try {
       const { name, notes, points } = editData;
 
+      // ✅ Build body only with defined fields
+      const updateBody: Record<string, any> = {};
+      if (name !== undefined) updateBody.name = name;
+      if (notes !== undefined) updateBody.notes = notes;
+
       const putRes = await fetch(`${API}/customers/${customerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${admin?.token}`,
         },
-        body: JSON.stringify({ name, notes }),
+        body: JSON.stringify(updateBody),
       });
 
       if (!putRes.ok) throw new Error('Failed to update customer info.');
