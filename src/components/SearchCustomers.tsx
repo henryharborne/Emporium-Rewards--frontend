@@ -70,21 +70,28 @@ function SearchCustomers() {
     try {
       const { name, notes, points } = editData;
 
-      // ✅ Build body only with defined fields
       const updateBody: Record<string, any> = {};
       if (name !== undefined) updateBody.name = name;
       if (notes !== undefined) updateBody.notes = notes;
 
-      const putRes = await fetch(`${API}/customers/${customerId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${admin?.token}`,
-        },
-        body: JSON.stringify(updateBody),
-      });
+      // ✅ Prevent empty PUT request that causes 400
+      if (Object.keys(updateBody).length === 0 && adjustAmount === 0) {
+        setError('No changes made to save.');
+        return;
+      }
 
-      if (!putRes.ok) throw new Error('Failed to update customer info.');
+      if (Object.keys(updateBody).length > 0) {
+        const putRes = await fetch(`${API}/customers/${customerId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${admin?.token}`,
+          },
+          body: JSON.stringify(updateBody),
+        });
+
+        if (!putRes.ok) throw new Error('Failed to update customer info.');
+      }
 
       const original = results.find((c) => c.id === customerId);
       const pointDiff = (points ?? 0) - (original?.points ?? 0);
