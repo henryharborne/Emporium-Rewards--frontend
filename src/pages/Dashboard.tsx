@@ -15,6 +15,7 @@ function Dashboard() {
   const [showManage, setShowManage] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
 
+  // Auth check
   useEffect(() => {
     const checkAdminAuth = async () => {
       const token = localStorage.getItem('adminToken');
@@ -49,6 +50,13 @@ function Dashboard() {
 
     checkAdminAuth();
   }, [navigate, setAdmin]);
+
+  // Cold-start prevention ping
+  useEffect(() => {
+    fetch('http://localhost:4000/api/admin/ping')
+      .then(() => console.log('Pinged backend to keep warm'))
+      .catch(() => console.log('Ping failed (possibly sleeping backend)'));
+  }, []);
 
   const handleLogout = () => {
     logoutAdmin();
