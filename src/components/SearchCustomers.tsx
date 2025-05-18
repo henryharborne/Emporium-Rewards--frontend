@@ -67,59 +67,59 @@ function SearchCustomers() {
   };
 
   const saveChanges = async (customerId: string) => {
-    try {
-      const { name, notes, points } = editData;
+  try {
+    const { name, notes, points } = editData;
 
-      if (name !== undefined && name.trim() === '') {
-        setError('Name cannot be empty.');
-        return;
-      }
-
-      const updateBody: Record<string, any> = {};
-      if (name !== undefined && name.trim() !== '') updateBody.name = name;
-      if (notes !== undefined && notes.trim() !== '') updateBody.notes = notes;
-
-      if (Object.keys(updateBody).length === 0 && adjustAmount === 0) {
-        setError('No changes made to save.');
-        return;
-      }
-
-      if (Object.keys(updateBody).length > 0) {
-        const putRes = await fetch(`${API}/customers/${customerId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${admin?.token}`,
-          },
-          body: JSON.stringify(updateBody),
-        });
-
-        if (!putRes.ok) throw new Error('Failed to update customer info.');
-      }
-
-      const original = results.find((c) => c.id === customerId);
-      const pointDiff = (points ?? 0) - (original?.points ?? 0);
-
-      if (pointDiff !== 0) {
-        const patchRes = await fetch(`${API}/customers/${customerId}/points`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${admin?.token}`,
-          },
-          body: JSON.stringify({ amount: pointDiff }),
-        });
-
-        if (!patchRes.ok) throw new Error('Failed to update points.');
-      }
-
-      setMessage('Customer updated successfully.');
-      cancelEdit();
-      handleSearch();
-    } catch (err: any) {
-      setError(err.message || 'Update failed.');
+    if (typeof name === 'string' && name.trim() === '') {
+      setError('Name cannot be empty.');
+      return;
     }
-  };
+
+    const updateBody: Record<string, any> = {};
+    if (typeof name === 'string' && name.trim() !== '') updateBody.name = name;
+    if (typeof notes === 'string' && notes.trim() !== '') updateBody.notes = notes;
+
+    if (Object.keys(updateBody).length === 0 && adjustAmount === 0) {
+      setError('No changes made to save.');
+      return;
+    }
+
+    if (Object.keys(updateBody).length > 0) {
+      const putRes = await fetch(`${API}/customers/${customerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${admin?.token}`,
+        },
+        body: JSON.stringify(updateBody),
+      });
+
+      if (!putRes.ok) throw new Error('Failed to update customer info.');
+    }
+
+    const original = results.find((c) => c.id === customerId);
+    const pointDiff = (points ?? 0) - (original?.points ?? 0);
+
+    if (pointDiff !== 0) {
+      const patchRes = await fetch(`${API}/customers/${customerId}/points`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${admin?.token}`,
+        },
+        body: JSON.stringify({ amount: pointDiff }),
+      });
+
+      if (!patchRes.ok) throw new Error('Failed to update points.');
+    }
+
+    setMessage('Customer updated successfully.');
+    cancelEdit();
+    handleSearch();
+  } catch (err: any) {
+    setError(err.message || 'Update failed.');
+  }
+};
 
   const applyPointAdjustment = (direction: 'add' | 'subtract') => {
     const adjustment = direction === 'add' ? adjustAmount : -adjustAmount;
