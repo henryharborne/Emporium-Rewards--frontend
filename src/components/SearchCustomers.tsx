@@ -69,9 +69,9 @@ function SearchCustomers() {
   const saveChanges = async (customerId: string) => {
     try {
       const { name, notes, points } = editData;
-
       const updateBody: Record<string, any> = {};
 
+      // Prevent empty name submission
       if (typeof name === 'string') {
         const trimmedName = name.trim();
         if (trimmedName === '') {
@@ -81,6 +81,7 @@ function SearchCustomers() {
         updateBody.name = trimmedName;
       }
 
+      // Only update notes if valid
       if (typeof notes === 'string') {
         const trimmedNotes = notes.trim();
         if (trimmedNotes !== '') {
@@ -88,7 +89,11 @@ function SearchCustomers() {
         }
       }
 
-      if (Object.keys(updateBody).length === 0 && adjustAmount === 0) {
+      const original = results.find((c) => c.id === customerId);
+      const pointDiff = (points ?? 0) - (original?.points ?? 0);
+
+      // ✅ Check if literally nothing changed
+      if (Object.keys(updateBody).length === 0 && pointDiff === 0) {
         setError('No changes made to save.');
         return;
       }
@@ -105,9 +110,6 @@ function SearchCustomers() {
 
         if (!putRes.ok) throw new Error('Failed to update customer info.');
       }
-
-      const original = results.find((c) => c.id === customerId);
-      const pointDiff = (points ?? 0) - (original?.points ?? 0);
 
       if (pointDiff !== 0) {
         const patchRes = await fetch(`${API}/customers/${customerId}/points`, {
