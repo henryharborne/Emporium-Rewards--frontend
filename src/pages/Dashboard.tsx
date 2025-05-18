@@ -91,7 +91,7 @@ function Dashboard() {
     }
   };
 
-  if (loading) {
+  if (loading || !admin?.token) {
     return <p className="container">Checking admin session...</p>;
   }
 

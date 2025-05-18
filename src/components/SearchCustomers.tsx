@@ -70,11 +70,15 @@ function SearchCustomers() {
     try {
       const { name, notes, points } = editData;
 
-      const updateBody: Record<string, any> = {};
-      if (name !== undefined) updateBody.name = name;
-      if (notes !== undefined) updateBody.notes = notes;
+      if (name !== undefined && name.trim() === '') {
+        setError('Name cannot be empty.');
+        return;
+      }
 
-      // ✅ Prevent empty PUT request that causes 400
+      const updateBody: Record<string, any> = {};
+      if (name !== undefined && name.trim() !== '') updateBody.name = name;
+      if (notes !== undefined && notes.trim() !== '') updateBody.notes = notes;
+
       if (Object.keys(updateBody).length === 0 && adjustAmount === 0) {
         setError('No changes made to save.');
         return;
