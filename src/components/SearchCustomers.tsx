@@ -54,7 +54,13 @@ function SearchCustomers() {
 
   const startEdit = (customer: Customer) => {
     setEditingId(customer.id);
-    setEditData({ name: customer.name, notes: customer.notes, points: customer.points });
+    setEditData({
+      name: customer.name,
+      notes: customer.notes,
+      points: customer.points,
+      email: customer.email,
+      phone: customer.phone,
+    });
     setAdjustAmount(0);
     setMessage('');
     setError('');
@@ -68,10 +74,9 @@ function SearchCustomers() {
 
   const saveChanges = async (customerId: string) => {
     try {
-      const { name, notes, points } = editData;
+      const { name, notes, points, email, phone } = editData;
       const updateBody: Record<string, any> = {};
 
-      // Prevent empty name submission
       if (typeof name === 'string') {
         const trimmedName = name.trim();
         if (trimmedName === '') {
@@ -81,7 +86,6 @@ function SearchCustomers() {
         updateBody.name = trimmedName;
       }
 
-      // Only update notes if valid
       if (typeof notes === 'string') {
         const trimmedNotes = notes.trim();
         if (trimmedNotes !== '') {
@@ -89,10 +93,17 @@ function SearchCustomers() {
         }
       }
 
+      if ('email' in editData) {
+        updateBody.email = (email ?? '').trim();
+      }
+
+      if ('phone' in editData) {
+        updateBody.phone = (phone ?? '').trim();
+      }
+
       const original = results.find((c) => c.id === customerId);
       const pointDiff = (points ?? 0) - (original?.points ?? 0);
 
-      // ✅ Check if literally nothing changed
       if (Object.keys(updateBody).length === 0 && pointDiff === 0) {
         setError('No changes made to save.');
         return;
@@ -193,6 +204,18 @@ function SearchCustomers() {
                   />
                   <input
                     className="input"
+                    value={editData.email ?? ''}
+                    onChange={(e) => setEditData((prev) => ({ ...prev, email: e.target.value }))}
+                    placeholder="Email"
+                  />
+                  <input
+                    className="input"
+                    value={editData.phone ?? ''}
+                    onChange={(e) => setEditData((prev) => ({ ...prev, phone: e.target.value }))}
+                    placeholder="Phone"
+                  />
+                  <input
+                    className="input"
                     value={editData.notes ?? ''}
                     onChange={(e) => setEditData((prev) => ({ ...prev, notes: e.target.value }))}
                     placeholder="Notes"
@@ -210,10 +233,18 @@ function SearchCustomers() {
                       }
                       placeholder="0"
                     />
-                    <button onClick={() => applyPointAdjustment('add')} className="button" style={{ backgroundColor: '#22c55e' }}>
+                    <button
+                      onClick={() => applyPointAdjustment('add')}
+                      className="button"
+                      style={{ backgroundColor: '#22c55e' }}
+                    >
                       Add
                     </button>
-                    <button onClick={() => applyPointAdjustment('subtract')} className="button" style={{ backgroundColor: '#ef4444' }}>
+                    <button
+                      onClick={() => applyPointAdjustment('subtract')}
+                      className="button"
+                      style={{ backgroundColor: '#ef4444' }}
+                    >
                       Subtract
                     </button>
                   </div>
