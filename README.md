@@ -1,54 +1,74 @@
-# React + TypeScript + Vite
+# Emporium Rewards – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for **Emporium Rewards**, a full-stack customer loyalty program built for Smoke Emporium in Gainesville, Florida. It allows customers to view their reward points and info, and provides a secure admin dashboard for managing customer records in real time.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React** – Frontend framework  
+- **TypeScript** – Safer JS with strong typing  
+- **Vite** – Fast dev/build tooling  
+- **Zustand** – Lightweight state management  
+- **Supabase Auth** – For admin login  
+- **Tailwind CSS** (removed, in favor of manual CSS)  
+- **Vercel** – Deployed frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Public View (Customers)
+- Customer point lookup via name, email, or phone
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Admin Dashboard
+- Secure login via Supabase JWT  
+- View and search customer records  
+- Edit customer name, phone, email, and notes  
+- Add or subtract points  
+- View and filter admin logs  
+- Download customer data as CSV  
+- Add and delete customers
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## Security
+
+- Token-based access control for admin-only features  
+- JWT validated via backend `/is-admin` endpoint  
+- Frontend securely stores and attaches auth tokens  
+- Future support for admin role management and 2FA planned
+
+---
+
+## Setup & Usage
+
+### 1. Clone the Repo
+git clone https://github.com/henryharborne/Emporium-Rewards--frontend.git
+cd Emporium-Rewards--frontend
+
+### 2. Install Dependencies
+npm install
+
+### 3. Environment Variables
+Create a .env file in the root directory with the following: VITE_API_BASE_URL=http://localhost:4000 (replace with deployed backend URL if using Render).
+
+### 4. Run the Development Server
+npm run dev (app runs on http://localhost:5173 by default)
+
+## Live Demo
+Check it out at: https://emporium-rewards.vercel.app
+
+## Project Structure
+/src
+  /components      → Reusable UI components
+  /pages           → Home, Dashboard, etc.
+  /store           → Zustand state management
+  /utils           → Helpers and API calls
+  App.tsx          → Routing
+  main.tsx         → Entry point
+
+## Author
+Henry Harborne
+Senior CS Major @ University of Florida
+Focused on full-stack development, cybersecurity, and DevOps
