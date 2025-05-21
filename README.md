@@ -44,20 +44,20 @@ This is the frontend for **Emporium Rewards**, a full-stack customer loyalty pro
 ## Setup & Usage
 
 ### 1. Clone the Repo
-git clone https://github.com/henryharborne/Emporium-Rewards--frontend.git
-cd Emporium-Rewards--frontend
+- git clone https://github.com/henryharborne/Emporium-Rewards--frontend.git
+- cd Emporium-Rewards--frontend
 
 ### 2. Install Dependencies
-npm install
+ - npm install
 
 ### 3. Environment Variables
-Create a .env file in the root directory with the following: VITE_API_BASE_URL=http://localhost:4000 (replace with deployed backend URL if using Render).
+ - Create a .env file in the root directory with the following: VITE_API_BASE_URL=http://localhost:4000 (replace with deployed backend URL if using Render).
 
 ### 4. Run the Development Server
-npm run dev (app runs on http://localhost:5173 by default)
+ - npm run dev (app runs on http://localhost:5173 by default)
 
 ## Live Demo
-Check it out at: https://emporium-rewards.vercel.app
+ - Check it out at: https://emporium-rewards.vercel.app
 
 ## Project Structure
 /src
@@ -69,6 +69,6 @@ Check it out at: https://emporium-rewards.vercel.app
   main.tsx         → Entry point
 
 ## Author
-Henry Harborne
-Senior CS Major @ University of Florida
-Focused on full-stack development, cybersecurity, and DevOps
+ - Henry Harborne
+ - Senior CS Major @ University of Florida
+ - Focused on full-stack development, cybersecurity, and DevOps
