@@ -78,12 +78,7 @@ function SearchCustomers() {
       const updateBody: Record<string, any> = {};
 
       if (typeof name === 'string') {
-        const trimmedName = name.trim();
-        if (trimmedName === '') {
-          setError('Name cannot be empty.');
-          return;
-        }
-        updateBody.name = trimmedName;
+        updateBody.name = name.trim(); // even if it's an empty string
       }
 
       if (typeof notes === 'string') {
