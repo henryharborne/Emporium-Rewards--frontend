@@ -8,6 +8,7 @@ type Customer = {
   phone: string;
   points: number;
   notes: string;
+  last_redeemed_at: string | null;
 };
 
 function SearchCustomers() {
@@ -60,6 +61,7 @@ function SearchCustomers() {
       points: customer.points,
       email: customer.email,
       phone: customer.phone,
+      last_redeemed_at: customer.last_redeemed_at,
     });
     setAdjustAmount(0);
     setMessage('');
@@ -78,7 +80,7 @@ function SearchCustomers() {
       const updateBody: Record<string, any> = {};
 
       if (typeof name === 'string') {
-        updateBody.name = name.trim(); // even if it's an empty string
+        updateBody.name = name.trim();
       }
 
       if (typeof notes === 'string') {
@@ -263,6 +265,16 @@ function SearchCustomers() {
                   <p><strong>Phone:</strong> {cust.phone}</p>
                   <p><strong>Points:</strong> {cust.points}</p>
                   <p><strong>Notes:</strong> {cust.notes}</p>
+                  <p>
+                    <strong>Last $10 Discount Redeemed:</strong>{' '}
+                    {cust.last_redeemed_at
+                      ? new Date(cust.last_redeemed_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })
+                      : 'Never'}
+                  </p>
                   <button onClick={() => startEdit(cust)} style={{ color: '#60a5fa', marginTop: '0.5rem' }}>
                     ✏️ Edit
                   </button>
